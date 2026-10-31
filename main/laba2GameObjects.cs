@@ -8,97 +8,103 @@ namespace laba2
 {
     public abstract class GameObject
     {
-        protected int Id;
-        protected string Name;
-        protected int X;
-        protected int Y;
+        protected int _id;
+        protected string _name;
+        protected int _x;
+        protected int _y;
 
         public GameObject(int id, string name, int x, int y)
         {
-            Id = id;
-            Name = name;
-            X = x;
-            Y = y;
+            _id = id;
+            _name = name;
+            _x = x;
+            _y = y;
         }
 
         public int getId()
         {
-            return Id;
+            return _id;
         }
 
         public string getName()
         {
-            return Name;
+            return _name;
         }
 
         public int getX()
         {
-            return X;
+            return _x;
         }
 
         public int getY()
         {
-            return Y;
+            return _y;
         }
     }
     public abstract class Building : GameObject
     {
-        protected bool Built;
+        protected bool _built;
 
         public Building(int id, string name, int x, int y, bool built): base(id, name, x, y)
         {
-            Built = built;
+            _built = built;
         }
 
         public bool IsBuilt()
         {
-            return Built;
+            return _built;
         }
     }
     public abstract class Unit : GameObject
     {
-        private float Hp;
+        private float _hp;
 
         public Unit(int id, string name, int x, int y, float hp) : base(id, name, x, y)
         {
-            Hp = hp;
+            _hp = hp;
         }
 
         public bool IsAlive()
         {
-            return Hp > 0;
+            return _hp > 0;
         }
 
         public float GetHp()
         {
-            return Hp;
+            return _hp;
         }
 
         public void ReceiveDamage(float damage)
         {
             if (damage > 0)
             {
-                Hp -= damage;
+                _hp -= damage;
 
-                if (Hp < 0)
+                if (_hp < 0)
                     Hp = 0;
             }
         }
     }
     public class Fort : Building, IAttacker
     {
-        private float Damage;
+        private float _damage;
+
+        public float Damage
+        {
+            get { return _damage; }
+            private set { _damage = value; }
+        }
 
         public Fort(int id, string name, int x, int y,bool built, float damage): base(id, name, x, y, built)
         {
-            Damage = damage;
+            _damage = damage;
         }
 
         public void Attack(Unit unit)
         {
             if (IsBuilt() && unit != null && unit.IsAlive())
             {
-                unit.ReceiveDamage(Damage);
+                unit.ReceiveDamage(_damage);
             }
         }
     }
@@ -110,31 +116,31 @@ namespace laba2
 
         public void Move(int x, int y)
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
         }
     }
     public class Archer : Unit, IAttacker, IMoveable
     {
-        private float Damage;
+        private float _damage;
 
         public Archer(int id, string name, int x, int y,float hp, float damage): base(id, name, x, y, hp)
         {
-            Damage = damage;
+            _damage = damage;
         }
 
         public void Attack(Unit unit)
         {
             if (IsAlive() && unit != null && unit.IsAlive())
             {
-                unit.ReceiveDamage(Damage);
+                unit.ReceiveDamage(_damage);
             }
         }
 
         public void Move(int x, int y)
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
         }
     }
 }
