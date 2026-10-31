@@ -8,106 +8,90 @@ namespace laba2
 {
     public abstract class GameObject
     {
-        protected int _id;
-        protected string _name;
-        protected int _x;
-        protected int _y;
+        private int _id;
+        public int Id { get => _id; private set => _id = value; }
+
+        private string _name;
+        public string Name { get => _name; private set => _name = value; }
+
+        private int _x;
+        public int X { get => _x; protected set => _x = value; }
+
+        private int _y;
+        public int Y { get => _y; protected set => _y = value; }
 
         public GameObject(int id, string name, int x, int y)
         {
-            _id = id;
-            _name = name;
-            _x = x;
-            _y = y;
+            Id = id;
+            Name = name;
+            X = x;
+            Y = y;
         }
 
-        public int getId()
-        {
-            return _id;
-        }
-
-        public string getName()
-        {
-            return _name;
-        }
-
-        public int getX()
-        {
-            return _x;
-        }
-
-        public int getY()
-        {
-            return _y;
-        }
+        public int getId() => Id;
+        public string getName() => Name;
+        public int getX() => X;
+        public int getY() => Y;
     }
+
     public abstract class Building : GameObject
     {
-        protected bool _built;
+        private bool _built;
+        public bool Built { get => _built; protected set => _built = value; }
 
         public Building(int id, string name, int x, int y, bool built): base(id, name, x, y)
         {
-            _built = built;
+            Built = built;
         }
-
-        public bool IsBuilt()
-        {
-            return _built;
-        }
+        
+        public bool IsBuilt() => Built;
     }
+
     public abstract class Unit : GameObject
     {
         private float _hp;
+        public float Hp { get => _hp; private set => _hp = value; }
 
-        public Unit(int id, string name, int x, int y, float hp) : base(id, name, x, y)
+        public Unit(int id, string name, int x, int y, float hp): base(id, name, x, y)
         {
-            _hp = hp;
+            Hp = hp;
         }
 
-        public bool IsAlive()
-        {
-            return _hp > 0;
-        }
+        public bool IsAlive() => Hp > 0;
 
-        public float GetHp()
-        {
-            return _hp;
-        }
+        public float GetHp() => Hp;
 
         public void ReceiveDamage(float damage)
         {
             if (damage > 0)
             {
-                _hp -= damage;
+                Hp -= damage;
 
-                if (_hp < 0)
+                if (Hp < 0)
                     Hp = 0;
             }
         }
     }
+
     public class Fort : Building, IAttacker
     {
         private float _damage;
+        public float Damage { get => _damage; private set => _damage = value; }
 
-        public float Damage
+        public Fort(int id, string name, int x, int y, bool built, float damage): base(id, name, x, y, built)
         {
-            get { return _damage; }
-            private set { _damage = value; }
-        }
-
-        public Fort(int id, string name, int x, int y,bool built, float damage): base(id, name, x, y, built)
-        {
-            _damage = damage;
+            Damage = damage;
         }
 
         public void Attack(Unit unit)
         {
             if (IsBuilt() && unit != null && unit.IsAlive())
             {
-                unit.ReceiveDamage(_damage);
+                unit.ReceiveDamage(Damage);
             }
         }
     }
+
     public class MobileHome : Building, IMoveable
     {
         public MobileHome(int id, string name, int x, int y, bool built): base(id, name, x, y, built)
@@ -116,31 +100,33 @@ namespace laba2
 
         public void Move(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
     }
+
     public class Archer : Unit, IAttacker, IMoveable
     {
         private float _damage;
+        public float Damage { get => _damage; private set => _damage = value; }
 
-        public Archer(int id, string name, int x, int y,float hp, float damage): base(id, name, x, y, hp)
+        public Archer(int id, string name, int x, int y, float hp, float damage): base(id, name, x, y, hp)
         {
-            _damage = damage;
+            Damage = damage;
         }
 
         public void Attack(Unit unit)
         {
             if (IsAlive() && unit != null && unit.IsAlive())
             {
-                unit.ReceiveDamage(_damage);
+                unit.ReceiveDamage(Damage);
             }
         }
 
         public void Move(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
     }
 }
